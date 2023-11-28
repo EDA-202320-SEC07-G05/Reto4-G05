@@ -36,17 +36,26 @@ def new_controller():
     Crea una instancia del modelo
     """
     #TODO: Llamar la función del modelo que crea las estructuras de datos
-    pass
+    return {'model': model.new_data_structs()}
 
 
 # Funciones para la carga de datos
 
-def load_data(control, filename):
+def load_data(control):
     """
     Carga los datos del reto
     """
     # TODO: Realizar la carga de datos
-    pass
+    file = cf.data_dir + 'bogota_vertices.txt' 
+    input_file = (open(file, encoding='utf-8')).readlines()
+    for contenido in input_file:
+        model.add_data_vertices(control['model'], contenido)
+    
+    file = cf.data_dir + 'bogota_arcos.txt' 
+    input_file = (open(file, encoding='utf-8')).readlines()[2:]
+    for contenido in input_file:
+        model.add_data_edge(control['model'], contenido)
+
 
 
 # Funciones de ordenamiento

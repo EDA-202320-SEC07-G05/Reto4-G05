@@ -31,6 +31,7 @@ from DISClib.DataStructures import mapentry as me
 assert cf
 from tabulate import tabulate
 import traceback
+from DISClib.ADT import graph as gr
 
 """
 La vista se encarga de la interacción con el usuario
@@ -45,7 +46,7 @@ def new_controller():
         Se crea una instancia del controlador
     """
     #TODO: Llamar la función del controlador donde se crean las estructuras de datos
-    pass
+    return controller.new_controller()
 
 
 def print_menu():
@@ -67,7 +68,7 @@ def load_data(control):
     Carga los datos
     """
     #TODO: Realizar la carga de datos
-    pass
+    return controller.load_data(control)
 
 
 def print_data(control, id):
@@ -157,6 +158,8 @@ if __name__ == "__main__":
         if int(inputs) == 1:
             print("Cargando información de los archivos ....\n")
             data = load_data(control)
+            print("v", gr.numVertices(control["model"]["grafo"]))
+            print("a", gr.numEdges(control["model"]["grafo"]))
         elif int(inputs) == 2:
             print_req_1(control)
 

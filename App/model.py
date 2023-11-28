@@ -47,6 +47,7 @@ from DISClib.Algorithms.Sorting import selectionsort as se
 from DISClib.Algorithms.Sorting import mergesort as merg
 from DISClib.Algorithms.Sorting import quicksort as quk
 assert cf
+import math
 
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá
@@ -62,17 +63,39 @@ def new_data_structs():
     manera vacía para posteriormente almacenar la información.
     """
     #TODO: Inicializar las estructuras de datos
-    pass
+    data_structs = {
+
+
+
+    }
+    data_structs['grafo'] = gr.newGraph()
+    data_structs['nodos_interseccion'] = lt.newList('ARRAY_LIST')
+    data_structs['tabla_id'] = mp.newMap()
+
+    return data_structs
 
 
 # Funciones para agregar informacion al modelo
 
-def add_data(data_structs, data):
-    """
-    Función para agregar nuevos elementos a la lista
-    """
-    #TODO: Crear la función para agregar elementos a una lista
-    pass
+def add_data_vertices(data_structs, data):
+
+    data = data[:-1].split(',')
+    gr.insertVertex(data_structs['grafo'], data[0])
+    mp.put(data_structs['tabla_id'], data[0], data[1:])
+    lt.addLast(data_structs['nodos_interseccion'], data[0])
+
+def add_data_edge(data_structs, data):
+
+    data = data[:-1].split(' ')
+    vertex_A = data[0]
+    entry_1 = mp.get(data_structs['tabla_id'], data[0])['value']
+    lat1, lon1 = float(entry_1[0]), float(entry_1[1])
+    for pos in range(1, len(data)):
+        vertex_B = data[pos]
+        entry_2 = mp.get(data_structs['tabla_id'], data[pos])['value']
+        lat2, lon2 = float(entry_2[0]), float(entry_2[1])
+
+        gr.addEdge(data_structs['grafo'], vertex_A, vertex_B, haversine(lat1, lon1, lat2, lon2))
 
 
 # Funciones para creacion de datos
@@ -199,3 +222,28 @@ def sort(data_structs):
     """
     #TODO: Crear función de ordenamiento
     pass
+
+
+def haversine(lat1, lon1, lat2, lon2):
+
+    #Radio de la Tierra en kilómetros
+    R = 6371.0
+
+    # Convertir las latitudes y longitudes de grados a radianes
+    lat1_rad = math.radians(float(lat1))
+    lon1_rad = math.radians(float(lon1))
+    lat2_rad = math.radians(float(lat2))
+    lon2_rad = math.radians(float(lon2))
+
+    # Diferencias de latitud y longitud
+    dlat = lat2_rad - lat1_rad
+    dlon = lon2_rad - lon1_rad
+
+    # Fórmula de Haversine
+    a = math.sin(dlat / 2)**2 + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(dlon / 2)**2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+    # Distancia en kilómetros
+    distance = R * c
+
+    return distance
